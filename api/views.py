@@ -113,14 +113,14 @@ class HtmlToPdfConvertView(APIView):
     def post(self, request):
         try:
             converter = HtmlToPdfConverter()
-            enhanced_html = converter.get_html_with_styles(
-                request.data.get('file_content')
+            enhanced_html = converter._prepare_html_content(
+                request.data.get('file_content'),
             )
 
             pdf_bytes = pdfkit.from_string(
                 enhanced_html,
                 False,
-                options=converter.get_options(),
+                options=converter.get_conversion_options(),
                 configuration=converter.config
             )
 

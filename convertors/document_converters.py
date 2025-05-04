@@ -74,12 +74,10 @@ class HtmlToPdfConverter(DocumentConverter):
         """
         html_content = request.POST.get('file_content')
         if not html_content:
-            raise ValueError("Отсутствует HTML-контент для конвертации")
+            raise ValueError('Отсутствует HTML-контент для конвертации')
 
         try:
-            print(html_content)
             processed_html = self._prepare_html_content(html_content)
-            print(processed_html)
             pdf_bytes = pdfkit.from_string(
                 input=processed_html,
                 output_path=False,
@@ -150,9 +148,11 @@ class ImageToPdfConverter(DocumentConverter):
                 img = Image.open(img_file)
                 if img.mode != 'RGB':
                     img = img.convert('RGB')
+
                 images.append(img)
             except IOError as e:
                 raise ValueError(f'Невозможно открыть изображение {img_file.name}') from e
+
         return images
 
     def _validate_image_format(self, image_file) -> None:
@@ -204,7 +204,6 @@ class WordToPdfConverter(DocumentConverter):
     def __init__(self):
         super().__init__()
         self.use_v2_generation = False
-
 
     def convert_word_to_pdf(self, file_name, request):
         """"""
@@ -371,10 +370,12 @@ class ImageToGrayscaleConverter(DocumentConverter):
     def _save_as_pdf(self, image: Image.Image, buffer: BytesIO) -> None:
         """Сохраняет изображение в формате PDF"""
         try:
-            image.save(buffer,
-                       format='PDF',
-                       resolution=self.PDF_RESOLUTION,
-                       save_all=True)
+            image.save(
+                buffer,
+                format='PDF',
+                resolution=self.PDF_RESOLUTION,
+                save_all=True,
+            )
         except ValueError as e:
             raise RuntimeError('Ошибка генерации PDF') from e
 
@@ -391,7 +392,7 @@ class ImageToGrayscaleConverter(DocumentConverter):
         return SimpleUploadedFile(
             name=filename,
             content=buffer.read(),
-            content_type=content_type
+            content_type=content_type,
         )
 
 
@@ -470,6 +471,7 @@ class PngToJpgConverter(DocumentConverter):
             background = Image.new(self.RGB_MODE, image.size, self.BACKGROUND_COLOR)
             background.paste(image, mask=image.split()[-1])
             return background
+
         return image.convert(self.RGB_MODE)
 
     def _create_output_file(self, base_name: str, buffer: BytesIO) -> SimpleUploadedFile:
