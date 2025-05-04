@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Предоставление доступа</title>
+    <link rel="stylesheet" href="{% static 'css/document/give_access.css' %}">
+    <link href="{% static 'css/select2.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{% static 'js/give_access.js' %}"></script>
+</head>
+    <body>
+        <div class="container">
+            <h2>
+                <i class="fas fa-file-contract"></i>
+                Предоставление доступа к документу: {{ document.title }}
+            </h2>
+    
+            <form method="POST" id="access-form">
+                {% csrf_token %}
+    
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+    
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-user-friends"></i>
+                        Выберите пользователя:
+                    </label>
+                    <select class="user-select" name="user" style="width: 100%"></select>
+                    {% if form.user.errors %}
+                        <div class="text-danger">{{ form.user.errors }}</div>
+                    {% endif %}
+                </div>
+    
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-shield-alt"></i>
+                        Уровень доступа:
+                    </label>
+                    <div class="access-levels">
+                        {% for choice in form.permissions %}
+                            <div class="form-check">
+                                {{ choice.tag }}
+                                <label class="form-check-label" for="{{ choice.id_for_label }}">
+                                    {% if choice.choice_label == 'Приватный' %}
+                                        <i class="fas fa-lock"></i>
+                                    {% elif choice.choice_label == 'Публичное чтение' %}
+                                        <i class="fas fa-book-open"></i>
+                                    {% else %}
+                                        <i class="fas fa-edit"></i>
+                                    {% endif %}
+                                    {{ choice.choice_label }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if form.permissions.errors %}
+                        <div class="text-danger">{{ form.permissions.errors }}</div>
+                    {% endif %}
+                </div>
+    
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-share-square"></i>
+                    Предоставить доступ
+                </button>
+            </form>
+        </div>
+    </body>
+</html>

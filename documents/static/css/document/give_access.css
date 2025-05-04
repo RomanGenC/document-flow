@@ -1,0 +1,137 @@
+body {
+    background-color: #f3f4f6;
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+h2 {
+    color: #2d3748;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #005bb5;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+}
+
+.access-levels {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #f8fafc;
+}
+
+.form-check {
+    margin: 0.8rem 0;
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    width: 1.2em;
+    height: 1.2em;
+    margin-right: 0.8rem;
+    accent-color: #3182ce;
+}
+
+.form-check-label {
+    font-size: 1rem;
+    color: #4a5568;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #3182ce;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background: #2b6cb0;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.alert-danger {
+    background: #fed7d7;
+    color: #c53030;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #feb2b2;
+}
+
+.select2-container--default .select2-selection--single {
+    height: 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+}
+
+.select2-container--default .select2-selection--single:hover {
+    border-color: #3182ce;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 38px;
+}
+
+.fas {
+    margin-right: 8px;
+    color: #3182ce;
+}
+
+.back-link a {
+    color: #3182ce;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.back-link a:hover {
+    color: #2b6cb0;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .btn-primary {
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+    }
+}

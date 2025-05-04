@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/document/document_detail.css' %}">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Детальная информация о документе</title>
+    </head>
+    <body>
+        <div class="document-container">
+            <h2>Документ: {{ document.title }}</h2>
+            <div class="document-details">
+                <p><span>Описание:</span> {{ document.description }}</p>
+                <p><span>Время:</span> {{ document.updated_at }}</p>
+                <p><span>Автор:</span> {{ document.owner.username }}</p>
+                <p><span>Размер файла:</span> {{ document.file_size }} байт</p>
+            </div>
+            <a class="download-link" href="{{ document.file.url }}">Открыть документ</a>
+        </div>
+        <div class="links-container">
+            <a class="link-button" href="{% url 'base' %}">Основная страница</a>
+            <a class="link-button" href="{% url 'profile' %}">Личный кабинет</a>
+        </div>
+    </body>
+</html>
