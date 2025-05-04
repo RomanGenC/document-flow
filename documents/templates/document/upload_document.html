@@ -1,0 +1,62 @@
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка документов</title>
+    <link href="{% static 'css/document/upload_document.css' %}" rel="stylesheet">
+</head>
+<div class="upload-section">
+    <h2 class="section-title">
+        <i class="fas fa-cloud-upload-alt"></i> Загрузка нового документа
+    </h2>
+
+    <form method="POST" enctype="multipart/form-data" class="upload-form">
+        {% csrf_token %}
+
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}">
+                    <i class="fas fa-heading"></i> Название документа
+                </label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                <div class="error-message">
+                    {{ form.title.errors }}
+                </div>
+                {% endif %}
+            </div>
+
+            <input type="hidden" name="upload_type" value="direct">
+
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}">
+                    <i class="fas fa-align-left"></i> Описание
+                </label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                <div class="error-message">
+                    {{ form.description.errors }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group file-upload">
+                <label for="{{ form.file.id_for_label }}" class="file-label">
+                    <i class="fas fa-file-upload"></i>
+                    <span class="file-text">Выберите файл</span>
+                    {{ form.file }}
+                </label>
+                <div class="file-name" id="file-name">Файл не выбран</div>
+                {% if form.file.errors %}
+                <div class="error-message">
+                    {{ form.file.errors }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <button type="submit" class="upload-button">
+            <i class="fas fa-upload"></i> Загрузить документ
+        </button>
+    </form>
+</div>

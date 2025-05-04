@@ -1,0 +1,219 @@
+body {
+    background-color: #f3f4f6;
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: white;
+    margin: 0;
+    font-size: 28px;
+}
+
+header {
+    background-color: #005bb5;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border-bottom: 4px solid #004080;
+}
+
+.superuser-summary {
+    border: 2px solid #4CAF50;
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.superuser-summary h2 {
+    color: #4CAF50;
+    margin-bottom: 10px;
+}
+
+.superuser-summary p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.superuser-summary ul {
+    list-style: none;
+    padding: 0;
+}
+
+.superuser-summary li {
+    margin-bottom: 8px;
+}
+
+.superuser-summary li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+.superuser-summary li a:hover {
+    text-decoration: underline;
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin: 40px 20px;
+    padding: 20px;
+}
+
+.button-group {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    min-width: 280px;
+    flex: 1;
+    transition: transform 0.3s ease;
+}
+
+.button-group:hover {
+    transform: translateY(-5px);
+}
+
+.button-group h3 {
+    margin: 0 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid;
+    font-size: 1.2em;
+    color: #2d3748;
+}
+
+.pdf-group h3 { border-color: #38a169; }
+.image-group h3 { border-color: #4299e1; }
+.experimental-group h3 { border-color: #f56565; }
+
+.group-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.button-group .child {
+    padding: 12px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+}
+
+.pdf-group .child { background: #38a169; }
+.image-group .child { background: #4299e1; }
+.experimental-group .child { background: #f56565; }
+
+.pdf-group .child:hover { background: #2f855a; }
+.image-group .child:hover { background: #3182ce; }
+.experimental-group .child:hover { background: #e53e3e; }
+
+@media (max-width: 768px) {
+    .button-container {
+        flex-direction: column;
+        margin: 20px 10px;
+    }
+
+    .button-group {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .group-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 1200px) {
+    .button-container {
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.navbar {
+    background: #1a365d;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+
+.logo {
+    color: white;
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.navbar-right {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-2px);
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+
+.main-header {
+    background: #2b6cb0;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 0;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .navbar-right {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-item {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+    }
+}

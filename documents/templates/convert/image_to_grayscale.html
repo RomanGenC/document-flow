@@ -1,0 +1,37 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/convert/image_to_grayscale.css' %}">
+<link rel="stylesheet" href="{% static 'css/convert/base_convertation_styles.css' %}">
+
+{% block content %}
+    <h3>Вставьте ваше изображение для конвертации в ЧБ</h3>
+    <form id="convert-form" method="post" action="{% url 'upload_document' %}" enctype="multipart/form-data">
+        <h3>Загрузите изображение, которое будет сгенерировано в ЧБ</h3>
+        
+        <div class="container">
+            <div class="textarea-container">
+                <label for="document-title">Заголовок документа:</label>
+                <input type="text" id="document-title" name="document_title">
+                
+                <div class="checkbox-wrapper">
+                    <label for="document-type" class="checkbox-label">
+                        <input type="checkbox" id="document-type" name="convert_to_pdf">
+                        <span class="custom-checkbox"></span>
+                        Сгенерировать документ в PDF
+                    </label>
+                </div>
+                
+                <input type="hidden" name="mode" value="image_to_grayscale">
+                
+                <label for="image-file">Загрузите документ:</label>
+                <input type="file" id="image-file" name="file_content">
+            </div>
+        </div>
+
+        {% csrf_token %}
+        
+        <div class="generate-button">
+            <button type="submit">Сгенерировать ЧБ из Изображения</button>
+        </div>
+    </form>
+    <a href="{% url 'base' %}">Основная страница</a>
+{% endblock %}

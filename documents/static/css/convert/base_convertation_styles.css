@@ -1,0 +1,102 @@
+body {
+    background-color: #f3f4f6;
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    padding: 20px;
+}
+
+h3, h4 {
+    color: #4a5568;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#convert-form {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #ddd;
+    margin-top: 20px;
+    transition: transform 0.3s ease;
+}
+
+
+#convert-form:hover {
+    transform: scale(1.01);
+}
+
+textarea, input[type="text"], input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #f9fafb;
+    color: #2d3748;
+}
+
+textarea {
+    height: 150px;
+}
+
+.container {
+    display: flex;
+    gap: 20px;
+    max-width: 100%;
+    margin: 0 auto;
+    align-items: stretch;
+}
+
+.textarea-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.textarea-container label {
+    font-weight: bold;
+    color: #4a5568;
+    margin-bottom: 8px;
+}
+
+.generate-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.generate-button button {
+    background-color: #3182ce;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.generate-button button:hover {
+    background-color: #2b6cb0;
+    transform: translateY(-2px);
+}
+
+a {
+    color: #3182ce;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#document-title {
+    margin-bottom: 15px;
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link href="{% static "css/base.css" %}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <title>Базовая страница</title>
+    </head>
+    <body>
+        <div class="navbar">
+            <div class="navbar-left">
+                <h1 class="logo">DocumentFlow</h1>
+            </div>
+
+            <div class="navbar-right">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="nav-item">
+                        <i class="fas fa-user-circle"></i> Профиль
+                    </a>
+                    <form method="post" action="{% url 'logout' %}" class="nav-item">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-button">
+                            <i class="fas fa-sign-out-alt"></i> Выход
+                        </button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'register' %}" class="nav-item">
+                        <i class="fas fa-user-plus"></i> Регистрация
+                    </a>
+                    <a href="{% url 'login' %}" class="nav-item">
+                        <i class="fas fa-sign-in-alt"></i> Вход
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <header class="main-header">
+            <h2>Добро пожаловать{% if user.is_authenticated %}, {{ user.username }}{% endif %}</h2>
+        </header>
+
+        {% if request.user.is_superuser %}
+            <div class="superuser-summary">
+                <ul>
+                    <li><a href="http://127.0.0.1:5555">Flower</a></li>
+                    <li><a href="{% url 'swagger-ui' %}">API</a></li>
+                    <li><a href="{% url 'database_info' %}">Информация о базе</a></li>
+                </ul>
+            </div>
+        {% endif %}
+
+        <div class="button-container">
+            <div class="button-group pdf-group">
+                <h3>Конвертация в PDF</h3>
+                <div class="group-content">
+                    <a class="child" href="{% url 'html_to_pdf' %}">HTML -> PDF</a>
+                    <a class="child" href="{% url 'word_to_pdf' %}">WORD -> PDF</a>
+                    <a class="child" href="{% url 'image_to_pdf' %}">Изображение -> PDF</a>
+                </div>
+            </div>
+
+            <div class="button-group image-group">
+                <h3>Работа с изображениями</h3>
+                <div class="group-content">
+                    <a class="child" href="{% url 'image_to_grayscale' %}">Изображение -> ЧБ</a>
+                    <a class="child" href="{% url 'png_to_jpg' %}">PNG -> JPG</a>
+                    <a class="child" href="{% url 'bmp_to_jpg' %}">BMP -> JPG</a>
+                    <a class="child" href="{% url 'image_distort' %}">Искажение изображения(в разработке)</a>
+                </div>
+            </div>
+
+            <div class="button-group experimental-group">
+                <h3>Экспериментальные функции</h3>
+                <div class="group-content">
+                    <a class="child" href="{% url 'pdf_to_word' %}" style="color:red">PDF -> WORD</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

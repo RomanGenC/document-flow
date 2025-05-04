@@ -1,0 +1,55 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/convert/html_to_pdf.css' %}">
+<script src="{% static 'js/html_to_pdf.js' %}"></script>
+
+{% block content %}
+    <form id="html-pdf-form" method="post" action="{% url 'upload_document' %}">
+        <h3>Введите текст, который будет сгенерирован в PDF</h3>
+        
+        <div class="section">
+            <h4>Теги форматирования</h4>
+            <div class="button-row">
+                <button type="button" onclick="insertTag('h1')">H1</button>
+                <button type="button" onclick="insertTag('p')">P</button>
+                <button type="button" onclick="insertTag('b')">B</button>
+                <button type="button" onclick="insertTag('i')">I</button>
+            </div>
+        </div>
+
+        <div class="section table-generator">
+            <h4>Генератор таблицы</h4>
+            <label>
+                Строки
+                <input type="number" id="table-rows" min="1" max="10" value="3">
+            </label>
+            <label>
+                Столбцы
+                <input type="number" id="table-cols" min="1" max="10" value="3">
+            </label>
+            <button type="button" onclick="insertTable()">Добавить таблицу</button>
+        </div>
+
+        <div class="container">
+            <div class="textarea-container">
+                <label for="document-title">Заголовок документа:</label>
+                <input type="text" class="section" id="document-title" name="document_title">
+                <label for="text-editor">Контент документа:</label>
+                <textarea id="text-editor" class="section" cols="50" rows="30" name="file_content" oninput="updatePreview()"></textarea>
+            </div>
+            
+            <input type="hidden" name="mode" value="html">
+            
+            <div class="preview-column">
+                <h3 class="preview-title">Предварительный просмотр</h3>
+                <div id="html-preview" class="preview-box"></div>
+            </div>
+        </div>
+
+        {% csrf_token %}
+        
+        <div class="generate-button">
+            <button type="submit">Сгенерировать PDF из введенного HTML</button>
+        </div>
+    </form>
+    <a href="{% url 'base' %}">Основная страница</a>
+{% endblock %}

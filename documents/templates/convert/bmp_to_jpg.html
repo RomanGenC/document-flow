@@ -1,0 +1,28 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/convert/base_convertation_styles.css' %}">
+
+{% block content %}
+    <h3>Вставьте ваше Bmp для конвертации в Jpg</h3>
+    <form id="convert-form" method="post" action="{% url 'upload_document' %}" enctype="multipart/form-data">
+        <h3>Загрузите Bmp, которое будет сконвертировано в Jpg</h3>
+        
+        <div class="container">
+            <div class="textarea-container">
+                <label for="document-title">Заголовок документа:</label>
+                <input type="text" id="document-title" name="document_title">
+                
+                <input type="hidden" name="mode" value="bmp_to_jpg">
+                
+                <label for="image-file">Загрузите документ:</label>
+                <input type="file" id="image-file" name="file_content">
+            </div>
+        </div>
+
+        {% csrf_token %}
+        
+        <div class="generate-button">
+            <button type="submit">Сгенерировать Bmp из Jpg</button>
+        </div>
+    </form>
+    <a href="{% url 'base' %}">Основная страница</a>
+{% endblock %}

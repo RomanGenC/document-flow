@@ -1,0 +1,28 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/convert/base_convertation_styles.css' %}">
+
+{% block content %}
+    <h3>Вставьте ваш pdf файл для конвертации в word</h3>
+    <form id="word-pdf-form" method="post" action="{% url 'upload_document' %}" enctype="multipart/form-data">
+        <h3>Загрузите документ, который будет сгенерирован в WORD</h3>
+        
+        <div class="container">
+            <div class="textarea-container">
+                <label for="document-title">Заголовок документа:</label>
+                <input type="text" id="document-title" name="document_title">
+                
+                <input type="hidden" name="mode" value="word">
+                
+                <label for="word-file">Загрузите документ:</label>
+                <input type="file" id="word-file" name="file_content">
+            </div>
+        </div>
+
+        {% csrf_token %}
+        
+        <div class="generate-button">
+            <button type="submit">Сгенерировать WORD из PDF</button>
+        </div>
+    </form>
+    <a href="{% url 'base' %}">Основная страница</a>
+{% endblock %}

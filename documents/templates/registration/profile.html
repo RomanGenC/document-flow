@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+    <link href="{% static 'css/registration/profile.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1><a href="{% url 'base' %}"><i class="fas fa-home"></i> Основная страница</a></h1>
+            </div>
+            <div class="user-info">
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h2>{{ user.get_full_name|default:user.username }}</h2>
+                <p>{{ user.email }}</p>
+                <small>Аккаунт создан: {{ user.date_joined|date:"d.m.Y" }}</small>
+            </div>
+            <form method="post" action="{% url 'logout' %}" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </button>
+            </form>
+        </div>
+
+        <div class="main-content">
+            <section class="section-upload">
+                <a href="{% url 'upload_document' %}" class="btn-upload">
+                    <i class="fas fa-cloud-upload-alt"></i> Загрузить новый документ
+                </a>
+            </section>
+
+            <div class="documents-section">
+                <section class="document-list">
+                    <h2 class="section-title">
+                        <i class="fas fa-folder-open"></i> Мои документы:
+                        <span class="badge">{{ documents|length }}</span>
+                    </h2>
+
+                    {% if documents %}
+                    <div class="document-grid">
+                        {% for document in documents %}
+                        <div class="document-card">
+                            <div class="document-header">
+                                <i class="fas fa-file-{{ document.file_type }}"></i>
+                                <h3>{{ document.title }}</h3>
+                                <span class="document-status {{ document.status }}">
+                                    {{ document.get_status_display }}
+                                </span>
+                            </div>
+
+                            <div class="document-meta">
+                                <p><i class="fas fa-history"></i> {{ document.created_at|date:"d.m.Y H:i" }}</p>
+                                <p><i class="fas fa-weight-hanging"></i> {{ document.file_size|filesizeformat }}</p>
+                                <p><i class="fas fa-code-branch"></i> Версия {{ document.version }}</p>
+                            </div>
+
+                            <div class="document-actions">
+                                <a href="{{ document.file.url }}" class="btn-action view" target="_blank">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ document.file.url }}" download class="btn-action download">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                                <a href="{% url 'delete_document' document.uuid %}" class="btn-action delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                <a href="{% url 'give_access' document.uuid %}" class="btn-action share">
+                                    <i class="fas fa-share-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>Нет загруженных документов</p>
+                    </div>
+                    {% endif %}
+                </section>
+
+                <section class="document-list">
+                    <h2 class="section-title">
+                        <i class="fas fa-share-square"></i> Доступные документы
+                        <span class="badge">{{ accessed_documents|length }}</span>
+                    </h2>
+
+                    {% if accessed_documents %}
+                    <div class="document-grid">
+                        {% for access in accessed_documents %}
+                        <div class="document-card shared">
+                            <div class="document-header">
+                                <i class="fas fa-file-{{ access.document.file_type }}"></i>
+                                <h3>{{ access.document.title }}</h3>
+                                <span class="access-level {{ access.permissions }}">
+                                    {{ access.get_permissions_display }}
+                                </span>
+                            </div>
+
+                            <div class="document-meta">
+                                <p><i class="fas fa-user-shield"></i> Выдал: {{ access.granted_by.get_full_name }}</p>
+                                <p><i class="fas fa-calendar-alt"></i> {{ access.granted_at|date:"d.m.Y H:i" }}</p>
+                                {% if access.expires_at %}
+                                <p><i class="fas fa-clock"></i> Истекает: {{ access.expires_at|date:"d.m.Y H:i" }}</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="document-actions">
+                                <a href="{{ access.document.file.url }}" class="btn-action view" target="_blank">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ access.document.file.url }}" download class="btn-action download">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                                {% if 'edit' in access.permissions %}
+                                <a href="#" class="btn-action edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-users-slash"></i>
+                        <p>Нет документов с доступом</p>
+                    </div>
+                    {% endif %}
+                </section>
+            </div>
+        </div>
+    </div>
+{#  ToDo: в js файл  #}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/select2.min.js' %}"></script>
+    <script>
+    $(document).ready(function() {
+        $('.grant_access_for_document').select2({
+            theme: 'bootstrap4',
+            width: '100%'
+        });
+    });
+    </script>
+</body>
+</html>
