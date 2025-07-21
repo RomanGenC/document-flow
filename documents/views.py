@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_http_methods
 
 from convertors.document_converters import (
@@ -14,9 +15,10 @@ from convertors.document_converters import (
     ImageToGrayscaleConverter, ImageToDistortConverter, PngToJpgConverter, BmpToJpgConverter
 )
 from utils.pdf.generate_pdf import convert_word_to_pdf_v2
+from utils.tasks_utils import run_task
 from .forms import DocumentForm, LoginForm, UserRegistrationForm, GiveAccessForm
 from .models import Document, DocumentAccess
-
+from .tasks import task_send_email
 
 User = get_user_model()
 
@@ -35,6 +37,7 @@ def profile(request):
     )
 
 
+@login_required
 def document_detail(request, uuid):
     """Выводит детальную информацию о документе"""
     document = get_object_or_404(Document, uuid=uuid)
@@ -57,6 +60,27 @@ def get_converter_by_mode(mode: str):
         'bmp_to_jpg': BmpToJpgConverter(),
         'image_distort': ImageToDistortConverter(),
     }.get(mode)
+
+
+def send_email_about_document(subject, html_message, user_email, user_id):
+    """
+    Метод для запуска таска по отправке письма на почту
+    :param subject: Заголовок письма
+    :param html_message: Текст письма в html
+    :param user_email: Почта пользователя, которому будет отправлено письмо
+    :param user_id: Id пользователя, которому будет отправлено письмо
+    """
+    run_task(
+        task=task_send_email,
+        queue='send_email',
+        task_kwargs={
+            'subject': subject,
+            'html_message': html_message,
+            'to': [user_email],
+        },
+        task_id=f'send_email_about_document_user_id_{user_id}',
+        time_limit=60,
+    )
 
 
 @login_required  # ToDo: оптимизировать
@@ -83,6 +107,14 @@ def upload_document(request):
             document.file_size = document.file.size
             document.file_type = document.file.name.split('.')[-1]
             document.save()
+            if request.user.email:
+                send_email_about_document(
+                    subject='Документ загружен',
+                    html_message='Ваш документ был загружен',
+                    user_email=request.user.email,
+                    user_id=request.user.id,
+                )
+
             return redirect('document_detail', uuid=document.uuid)
         else:
             print(form.errors)
@@ -103,24 +135,11 @@ def get_pdf_from_word(word_file, pdf_file_name, pdf_title):
 
 
 def delete_document(request, document_uuid):
-    user = get_object_or_404(User, username=request.user.username)
     document = Document.objects.filter(uuid=document_uuid).first()
     # os.remove(os.path.join(settings.MEDIA_ROOT, 'documents',  f'{document.title}.{document.file_type}'))
     document.delete()
 
-    documents = Document.objects.filter(uploaded_by=user)
-    documents_with_unshared_users = []
-
-    for document in documents:
-        documents_with_unshared_users.append({
-            "document": document,
-        })
-
-    return render(
-        request,
-        'registration/profile.html',
-        {'user': user, 'documents_with_unshared_users': documents_with_unshared_users},
-    )
+    return redirect('profile')
 
 
 def give_access(request, document_uuid):
@@ -133,6 +152,20 @@ def give_access(request, document_uuid):
             access.document = document
             access.granted_by = request.user
             access.save()
+            user_for_sending_email = User.objects.filter(id=request.POST['user'][0]).first()
+            if user_for_sending_email.email:
+                context = {
+                    'owner': request.user,
+                    'shared_document': document,
+                    'site_domain': 'http://127.0.0.1:4545',
+                }
+                send_email_about_document(
+                    subject='С вами поделились документом',
+                    html_message=render_to_string('send_email/email_shared_document.html', context),
+                    user_email=user_for_sending_email.email,
+                    user_id=user_for_sending_email.id,
+                )
+
             return render(request, 'document/document_detail.html', {'document': document})
     else:
         form = GiveAccessForm(document=document)
@@ -217,7 +250,7 @@ def login_user(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponse('Вы успешно аунтентифицировались!')
+                    return render(request, 'base.html')
                 else:
                     return HttpResponse('Аутентификация не прошла!')
             else:

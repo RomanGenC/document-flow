@@ -12,4 +12,5 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 app.conf.task_queues = (
     Queue('celery', routing_key='celery'),
     Queue('generate_pdf', routing_key='generate_pdf'),
+    Queue('send_email', routing_key='send_email'),
 )
